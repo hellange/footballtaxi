@@ -20,6 +20,11 @@ get '/' do
   redirect '/index.html'
 end
 
+get '/me' do
+  @me = "helge"
+  erb :'me'
+end
+
 
 get '/callback' do
   puts "Got callback from google with #{params.to_json}"
@@ -40,5 +45,7 @@ get '/callback' do
 
   access_token = access_token_info[:access_token]  
   result = RestClient::Resource.new("https://www.googleapis.com/oauth2/v2/userinfo?access_token=#{access_token}").get
-  puts result
+  @me_info = JSON.parse(result, symbolize_names: true)  
+  puts @me_info
+  erb :'me'
 end
